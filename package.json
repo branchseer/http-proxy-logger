@@ -1,0 +1,29 @@
+{
+  "name": "http-logger",
+  "version": "0.0.0",
+  "description": "Sniff all http transports via a built-in proxy server",
+  "main": "index.js",
+  "dependencies": {
+    "http-proxy-server": "~0.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://patr0nus@github.com/patr0nus/http-logger.git"
+  },
+  "keywords": [
+    "http",
+    "sniff",
+    "sniffer",
+    "proxy"
+  ],
+  "author": "patr0nus",
+  "license": "wtfpl",
+  "bugs": {
+    "url": "https://github.com/patr0nus/http-logger/issues"
+  },
+  "homepage": "https://github.com/patr0nus/http-logger"
+}
