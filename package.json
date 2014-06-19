@@ -1,10 +1,10 @@
 {
   "name": "http-logger",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Sniff all http transports via a built-in proxy server",
   "main": "index.js",
   "dependencies": {
-    "http-proxy-server": "~0.0.2",
+    "http-proxy-server": "*",
     "iconv-lite": "^0.4.3"
   },
   "devDependencies": {},
