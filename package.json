@@ -1,6 +1,6 @@
 {
   "name": "http-proxy-logger",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Sniff all http transports via a built-in proxy server",
   "main": "index.js",
   "dependencies": {
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://patr0nus@github.com/patr0nus/http-logger.git"
+    "url": "https://patr0nus@github.com/patr0nus/http-proxy-logger"
   },
   "keywords": [
     "http",
