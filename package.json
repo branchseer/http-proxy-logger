@@ -7,9 +7,12 @@
     "http-proxy-server": "*",
     "iconv-lite": "^0.4.3"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "express": "^4.4.4",
+    "request": "^2.36.0"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --compilers coffee:coffee-script/register"
   },
   "repository": {
     "type": "git",
