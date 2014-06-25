@@ -100,9 +100,11 @@ describe 'HttpProxyLogger', ->
           body: body
         logger.on 'connection', (connection) ->
           if connection.url == url
-            connection.once 'response', (response) -> response.on 'end', ->
-              assert.equal response.body, body
-              done()
+            connection.once 'response', (response) ->
+              return done()
+              response.getBody.then (resBody) ->
+                assert.equal resBody, body
+                done()
 
       it 'should uncompress the body', (done) ->
         url = "#{baseURL}echo/compress"
