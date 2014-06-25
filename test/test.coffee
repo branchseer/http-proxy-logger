@@ -75,15 +75,15 @@ describe 'HttpProxyLogger', ->
   describe 'Request', ->
     it 'should get the method', (done) ->
       url = "#{baseURL}/hello/method"
-      logger.on 'connection', (connection) -> if connection.url == url
-        assert connection.method, 'GET'
+      logger.on 'connection', (connection) -> if connection.request.url == url
+        assert connection.request.method, 'GET'
         done()
       request.get url
 
     it 'should get the headers', (done)->
       url = "#{baseURL}request_headers"
-      logger.on 'connection', (connection) -> if connection.url == url
-        assert connection.requestHeaders['x-field'] == 'value'
+      logger.on 'connection', (connection) -> if connection.request.url == url
+        assert connection.request.headers['x-field'] == 'value'
         done()
       request.get
         url: url
@@ -99,7 +99,7 @@ describe 'HttpProxyLogger', ->
           url: url
           body: body
         logger.on 'connection', (connection) ->
-          if connection.url == url
+          if connection.request.url == url
             connection.once 'response', (response) -> response.on 'end', ->
               assert.equal response.body, body
               done()
@@ -108,7 +108,7 @@ describe 'HttpProxyLogger', ->
         url = "#{baseURL}echo/compress"
         body = 'foo and bar'
         logger.on 'connection', (connection) ->
-          if connection.url == url
+          if connection.request.url == url
             connection.once 'response', (response) -> response.on 'end', ->
               assert.notEqual response.body.toString(), body
               response.decodeBody (decoded)->
@@ -128,7 +128,7 @@ describe 'HttpProxyLogger', ->
         text = '你好gbk'
         url = "#{baseURL}charset/gbk/in-content-type/#{text}"
         logger.on 'connection', (connection) ->
-          if connection.url == url
+          if connection.request.url == url
             connection.once 'response', (response) -> response.on 'end', ->
               assert.notEqual response.body.toString(), text
               response.decodeBody ->
@@ -140,7 +140,7 @@ describe 'HttpProxyLogger', ->
         text = '你好xml里的gbk'
         url = "#{baseURL}charset/gbk/in-xml/#{text}"
         logger.on 'connection', (connection) ->
-          if connection.url == url
+          if connection.request.url == url
             connection.once 'response', (response) -> response.on 'end', ->
               assert.notEqual response.body.toString(), text
               response.decodeBody ->
@@ -156,7 +156,7 @@ describe 'HttpProxyLogger', ->
         text = '你好html4里的gbk'
         url = "#{baseURL}charset/gbk/in-html/#{text}"
         logger.on 'connection', (connection) ->
-          if connection.url == url
+          if connection.request.url == url
             connection.once 'response', (response) -> response.on 'end', ->
               assert.notEqual response.body.toString(), text
               response.decodeBody ->
@@ -172,7 +172,7 @@ describe 'HttpProxyLogger', ->
         text = '你好压缩了的html5里的gbk'
         url = "#{baseURL}charset/gbk/in-html5/#{text}"
         logger.on 'connection', (connection) ->
-          if connection.url == url
+          if connection.request.url == url
             connection.once 'response', (response) -> response.on 'end', ->
               assert.notEqual response.body.toString(), text
               response.decodeBody ->
