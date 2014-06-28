@@ -14,7 +14,7 @@
     "xml2js": "^0.4.4"
   },
   "scripts": {
-    "test": "mocha --compilers coffee:coffee-script/register"
+    "test": "mocha --compilers coffee:coffee-script/register test/test.coffee"
   },
   "repository": {
     "type": "git",

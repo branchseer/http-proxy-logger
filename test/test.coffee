@@ -1,6 +1,6 @@
 assert = require 'assert'
 express = require 'express'
-HttpLogger = require '../'
+{HttpLogger} = require '../'
 compression = require 'compression'
 iconv = require 'iconv-lite'
 parseXmlString = require('xml2js').parseString
@@ -110,14 +110,10 @@ describe 'HttpProxyLogger', ->
         logger.on 'connection', (connection) ->
           if connection.request.url == url
             connection.once 'response', (response) -> response.on 'end', ->
-              assert.notEqual response.body.toString(), body
-              response.decodeBody (decoded)->
-                assert.equal decoded, body
-                assert.equal @decodedBody, body
-                response.decodeBody (decoded)->#invoke twice
-                  assert.equal decoded, body
-                  assert.equal @decodedBody, body
-                  done()
+              assert.equal @body, body
+              done();
+            
+                  
         request.post
           url: url
           body: body
@@ -130,10 +126,8 @@ describe 'HttpProxyLogger', ->
         logger.on 'connection', (connection) ->
           if connection.request.url == url
             connection.once 'response', (response) -> response.on 'end', ->
-              assert.notEqual response.body.toString(), text
-              response.decodeBody ->
-                assert.equal @decodedBody, text
-                done()
+              assert.equal @body, text
+              done()
         request.get url
 
       it 'should identity and decode the charset in xml', (done) ->
@@ -142,14 +136,12 @@ describe 'HttpProxyLogger', ->
         logger.on 'connection', (connection) ->
           if connection.request.url == url
             connection.once 'response', (response) -> response.on 'end', ->
-              assert.notEqual response.body.toString(), text
-              response.decodeBody ->
-                parseXmlString @decodedBody.toString(),
-                (err, result) ->
-                  if err?
-                    return done err
-                  assert.equal result.text, text
-                  done()
+              parseXmlString @body.toString(),
+              (err, result) ->
+                if err?
+                  return done err
+                assert.equal result.text, text
+                done()
         request.get url
 
       it 'should identity and decode the charset in html4 head', (done) ->
@@ -158,14 +150,12 @@ describe 'HttpProxyLogger', ->
         logger.on 'connection', (connection) ->
           if connection.request.url == url
             connection.once 'response', (response) -> response.on 'end', ->
-              assert.notEqual response.body.toString(), text
-              response.decodeBody ->
-                parseXmlString @decodedBody.toString(), strict: false,
-                (err, result) ->
-                  if err?
-                    return done err
-                  assert.equal result.HTML.BODY[0], text
-                  done()
+              parseXmlString @body.toString(), strict: false,
+              (err, result) ->
+                if err?
+                  return done err
+                assert.equal result.HTML.BODY[0], text
+                done()
         request.get url
 
       it 'should uncompress and decode', (done) ->
@@ -174,16 +164,13 @@ describe 'HttpProxyLogger', ->
         logger.on 'connection', (connection) ->
           if connection.request.url == url
             connection.once 'response', (response) -> response.on 'end', ->
-              assert.notEqual response.body.toString(), text
-              response.decodeBody ->
-                parseXmlString @decodedBody.toString(), strict: false,
-                (err, result) ->
-                  if err?
-                    return done err
-                  assert.equal result.HTML.BODY[0], text
-                  done()
+              parseXmlString @body.toString(), strict: false,
+              (err, result) ->
+                if err?
+                  return done err
+                assert.equal result.HTML.BODY[0], text
+                done()
         request.get
           url: url
           headers:
             'accept-encoding': 'gzip'
-
