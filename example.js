@@ -1,38 +1,34 @@
-var HttpLogger = require('./');
+var HttpProxyLogger = require('./').HttpLogger;
 var path = require('path');
 var fs = require('fs');
+var child_process = require('child_process');
+var util = require('util');
 
 
-var logger = new HttpLogger();
-logger.startProxy(8080);
+var logger = new HttpProxyLogger();
+logger.startProxy(9396);
 logger.startLogging();
 
 
-var certFolder = '/Users/patr0nus/repo/Cellist/build/certs';
-var keyPath = path.join(certFolder, 'privatekey.pem');
-var certPath = path.join(certFolder, 'certificate.pem')
-var httpsOpts = {
-  key: fs.readFileSync(keyPath),
-  cert: fs.readFileSync(certPath)
-}
+var certFolder = '/Users/patr0nus/repo/Cellist/src/assets/certs';
+var keyPath = path.join(certFolder, 'server.key');
+var keyFile = fs.readFileSync(keyPath);
 
-logger.setHttpsOption(httpsOpts);
+logger.setHttpsOption(function (domain, cb) {
+  gen_csr = child_process.exec(util.format('bash gen_crt %s', domain), {
+    cwd: certFolder
+  }, function (error, stdout, stderr) {
+    cb({
+      key: keyFile,
+      cert: stdout
+    })
+  });
+});
 
 logger.on('connection', function (connection) {
-  console.log(connection.method, connection.url);
-  connection.once('error', function (err) {
-    //console.log(err)
-  });
-
-  connection.once('requestFinish', function (request) {
-    //console.log(connection.requestHeaders['user-agent']);
-  });
-  
   connection.once('response', function (response) {
-    response.once('end', function (err) {
-      response.decodeBody(function () {
-        console.log(this.body.toString());
-      });
-    })
+    response.once('end', function () {
+      console.log(response.body);
+    });
   });
 });
